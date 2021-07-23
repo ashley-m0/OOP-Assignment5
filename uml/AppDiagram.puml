@@ -10,7 +10,7 @@ class Item{
     - serialNumber: String
     - name: String
 
-    + setValue(value: String)
+    + setValue(value: double)
     + getValue(): String
     + setSerialNumber(serialNumber: String)
     + getSerialNumber(): String

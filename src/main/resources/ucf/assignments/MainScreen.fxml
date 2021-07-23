@@ -18,11 +18,11 @@
     <RowConstraints percentHeight="96.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <TableView prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+      <TableView fx:id="itemTable" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
          <columns>
-            <TableColumn prefWidth="157.0" text="Value" />
-            <TableColumn minWidth="0.0" prefWidth="202.0" text="Serial Number" />
-            <TableColumn minWidth="5.0" prefWidth="340.0" text="Name" />
+            <TableColumn fx:id="valueColumn" prefWidth="157.0" text="Value" />
+            <TableColumn fx:id="serialNumberColumn" minWidth="0.0" prefWidth="202.0" text="Serial Number" />
+            <TableColumn fx:id="nameColumn" minWidth="5.0" prefWidth="340.0" text="Name" />
          </columns></TableView>
       <MenuBar>
         <menus>
