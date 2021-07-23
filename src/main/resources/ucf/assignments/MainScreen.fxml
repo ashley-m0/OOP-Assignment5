@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignments.MainScreenController">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints percentHeight="4.0" vgrow="SOMETIMES" />
+    <RowConstraints percentHeight="96.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <TableView prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+         <columns>
+            <TableColumn prefWidth="157.0" text="Value" />
+            <TableColumn minWidth="0.0" prefWidth="202.0" text="Serial Number" />
+            <TableColumn minWidth="5.0" prefWidth="340.0" text="Name" />
+         </columns></TableView>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+                  <MenuItem mnemonicParsing="false" onAction="#newListMenuButtonPressed" text="New List" />
+              <MenuItem mnemonicParsing="false" onAction="#saveListButtonPressed" text="Save As..." />
+                  <MenuItem mnemonicParsing="false" onAction="#openFileMenuButtonPressed" text="Open..." />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+                  <MenuItem mnemonicParsing="false" onAction="#addItemMenuButtonPressed" text="Add Item" />
+                  <MenuItem mnemonicParsing="false" onAction="#editItemMenuButtonPressed" text="Edit Item" />
+              <MenuItem mnemonicParsing="false" onAction="#deleteItemMenuButtonPressed" text="Delete Item" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" onAction="#helpMenuButtonPressed" text="Help" />
+        </menus>
+      </MenuBar>
+   </children>
+</GridPane>

@@ -1,0 +1,64 @@
+@startuml
+
+class App{
+    main()
+    start()
+}
+
+class Item{
+    - value: String
+    - serialNumber: String
+    - name: String
+
+    + setValue(value: String)
+    + getValue(): String
+    + setSerialNumber(serialNumber: String)
+    + getSerialNumber(): String
+    + setName(name: String)
+    + getName(): String
+}
+
+class MainScreenController{
+    - mainList: ArrayList<Item>
+    - scenes: HashMap
+    - itemTable: TableView<Item>
+    - valueColumn: TableColumn<Item, String>
+    - serialNumberColumn: TableColumn<Item, String>
+    - nameColumn: TableColumn<Item, String>
+
+    + initialize()
+    + updateTable(currList: ArrayList<Item>)
+    + getTableInfo(currList: ArrayList<Item>)
+    + newListMenuButtonPressed(actionEvent: ActionEvent)
+    + clearList(currList: ArrayList<Item>)
+    + saveListMenuButtonPressed(actionEvent: ActionEvent)
+    + loadSaveFileScreen()
+    + openFileMenuButtonPressed(actionEvent: ActionEvent)
+    + loadOpenFileScreen()
+    + addItemMenuButtonPressed(actionEvent: ActionEvent)
+    + loadAddItemScreen()
+    + editItemMenuButtonPressed(actionEvent: ActionEvent)
+    + loadEditItemScreen()
+    + deleteItemMenuButtonPressed(actionEvent: ActionEvent)
+    + loadDeleteItemScreen()
+    + helpMenuButtonPressed(actionEvent: ActionEvent)
+    + loadHelpScreen()
+}
+
+class SaveFileController{}
+class OpenFileController{}
+class AddItemController{}
+class EditItemController{}
+class DeleteItemController{}
+class HelpScreenController{}
+
+javafx.Application <|-- App
+
+App - MainScreenController
+MainScreenController -- SaveFileController
+MainScreenController -- OpenFileController
+MainScreenController -- AddItemController
+MainScreenController -- EditItemController
+MainScreenController -- DeleteItemController
+MainScreenController -- HelpScreenController
+@enduml
