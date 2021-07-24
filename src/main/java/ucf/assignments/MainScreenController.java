@@ -115,4 +115,29 @@ public class MainScreenController implements Initializable {
 
     public void deleteItemMenuButtonPressed(ActionEvent actionEvent) {
     }
+
+    public void addItemButtonPressed(ActionEvent actionEvent) {
+        //call add item method
+        mainList = addItem(mainList);
+        //update table
+        updateTable(mainList);
+    }
+
+    public ArrayList<Item> addItem(ArrayList<Item> currList){
+        //call method to get user input from text fields
+        Item newItem = getInfoFromFields();
+        //add item to currList
+        currList.add(newItem);
+        //return currList
+        return currList;
+    }
+
+    public Item getInfoFromFields(){
+        String value = valueField.getText();
+        String serialNumber = serialNumberField.getText();
+        String name = nameField.getText();
+        Item newItem = new Item(value, serialNumber, name);
+        return newItem;
+    }
+
 }
