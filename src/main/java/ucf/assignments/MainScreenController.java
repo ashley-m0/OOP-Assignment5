@@ -77,11 +77,34 @@ public class MainScreenController implements Initializable {
     public void helpMenuButtonPressed(ActionEvent actionEvent) {
     }
 
-    public void setMainList(ArrayList<Item> currList){
-        mainList = currList;
+    public void deleteItemMenuButtonPressed(ActionEvent actionEvent) {
+        //get selected tasks
+        ObservableList<Item> selectedItems = itemTable.getSelectionModel().getSelectedItems();
+        //remove the selected tasks from the mainList
+        mainList = removeItems(mainList, selectedItems);
+        //update the table
+        updateTable(mainList);
     }
 
-    public void deleteItemMenuButtonPressed(ActionEvent actionEvent) {
+    public ArrayList<Item> removeItems(ArrayList<Item> currList, ObservableList<Item> selectedItems){
+        //iterate through all of the selected tasks
+        for(Item item: selectedItems){
+            //find the index of the selected task
+            int index = searchBySN(currList, item.getSerialNumber());
+            //remove it from the ArrayList
+            currList.remove(index);
+        }
+        //return the updated ArrayList
+        return currList;
+    }
+
+    public void valueEditCommitted(TableColumn.CellEditEvent<Item, String> itemStringCellEditEvent) {
+    }
+
+    public void serialNumberEditCommitted(TableColumn.CellEditEvent<Item, String> itemStringCellEditEvent) {
+    }
+
+    public void nameEditCommitted(TableColumn.CellEditEvent<Item, String> itemStringCellEditEvent) {
     }
 
     public void addItemButtonPressed(ActionEvent actionEvent) {
@@ -101,6 +124,8 @@ public class MainScreenController implements Initializable {
         Item newItem = new Item();
         //initialize the message that will be displayed to the user
         String message = "";
+
+        //determine whether the information entered is correct
         if(!newItem.setValue(information[0])){
             message += "Please enter a valid value.(Only values with two or less decimal places)\n";
             correct = false;
@@ -113,6 +138,16 @@ public class MainScreenController implements Initializable {
             message += "Please enter a valid name. (At least 2 characters long but smaller than 256 characters long)\n";
             correct = false;
         }
+        if(findSNDuplicates(currList, information[1])){
+            message += "Serial Number already exists in list. Please enter a new one.";
+            correct = false;
+        }
+        if(findNameDuplicates(currList, information[2])){
+            message += "Name already exists in list. Please enter a new one.";
+            correct = false;
+        }
+
+        //if everything is correct
         if (correct){
             //add item to currList
             currList.add(newItem);
@@ -121,6 +156,7 @@ public class MainScreenController implements Initializable {
             //clear the text fields
             resetFields();
         }
+
         //set text area to the message created
         systemMessageArea.setText(message);
         //return currList
@@ -137,6 +173,7 @@ public class MainScreenController implements Initializable {
         //return String array
         return information;
     }
+
 
 
     public void searchItemButtonPressed(ActionEvent actionEvent) {
@@ -201,6 +238,32 @@ public class MainScreenController implements Initializable {
         return -1;
     }
 
+    public boolean findSNDuplicates(ArrayList<Item>currList, String query){
+        //call the searchBySN method
+        int found = searchBySN(currList, query);
+        //if the item was not found (no duplicate)
+        if(found == -1){
+            //return false (there are no duplicates)
+            return false;
+        }else{
+            //return true (there are duplicates)
+            return true;
+        }
+    }
+
+    public boolean findNameDuplicates(ArrayList<Item>currList, String query){
+        //call the searchByName method
+        int found = searchByName(currList, query);
+        //if the item was not found (no duplicate)
+        if(found == -1){
+            //return false (there are no duplicates)
+            return false;
+        }else{
+            //return true (there are duplicates)
+            return true;
+        }
+    }
+
     public void setUpChoiceBox(){
         //add Serial Number and Name to the ChoiceBox options
         queryType.getItems().add("Serial Number");
@@ -256,4 +319,6 @@ public class MainScreenController implements Initializable {
         itemTable.setEditable(true);
         itemTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
+
+
 }

@@ -14,9 +14,8 @@ public class Item {
         if (authenticateValue(value)){
             //Format the String to ensure that it has decimal values
             Double valueDouble = Double.valueOf(value);
-            String valueString = String.valueOf(valueDouble);
             //Assign the String with a "$" in front
-            this.value = "$" + valueString;
+            this.value = String.format("$ %.2f", valueDouble);
             //return true to indicate that the value was added successfully
             return true;
         }else{

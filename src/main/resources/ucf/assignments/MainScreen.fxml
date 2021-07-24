@@ -31,9 +31,9 @@
    <children>
       <TableView fx:id="itemTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
          <columns>
-            <TableColumn fx:id="valueColumn" prefWidth="138.0" text="Value" />
-            <TableColumn fx:id="serialNumberColumn" minWidth="0.0" prefWidth="184.0" text="Serial Number" />
-            <TableColumn fx:id="nameColumn" minWidth="5.0" prefWidth="377.0" text="Name" />
+            <TableColumn fx:id="valueColumn" onEditCommit="#valueEditCommitted" prefWidth="138.0" text="Value" />
+            <TableColumn fx:id="serialNumberColumn" minWidth="0.0" onEditCommit="#serialNumberEditCommitted" prefWidth="184.0" text="Serial Number" />
+            <TableColumn fx:id="nameColumn" minWidth="5.0" onEditCommit="#nameEditCommitted" prefWidth="377.0" text="Name" />
          </columns></TableView>
       <MenuBar GridPane.columnSpan="2">
         <menus>
