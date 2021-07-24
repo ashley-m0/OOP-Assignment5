@@ -10,14 +10,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +38,14 @@ public class MainScreenController implements Initializable {
     @FXML private TableColumn<Item, String> valueColumn;
     @FXML private TableColumn<Item, String> serialNumberColumn;
     @FXML private TableColumn<Item, String> nameColumn;
+
+    //Initialize Text Fields
+    @FXML private TextField valueField;
+    @FXML private TextField serialNumberField;
+    @FXML private TextField nameField;
+
+    //Initialize Text Area for system messages
+    @FXML private TextArea systemMessageArea;
 
     public void updateTable(ArrayList<Item> currList){
         //initialize the cell values of the columns
@@ -73,8 +84,20 @@ public class MainScreenController implements Initializable {
     }
 
 
-
+    /**
+     * Clear List
+     * @param actionEvent
+     */
     public void newListMenuButtonPressed(ActionEvent actionEvent) {
+        //Call clearList method
+        ArrayList<Item> currList = clearList(mainList);
+        //Update Table
+        updateTable(currList);
+    }
+
+    public ArrayList<Item> clearList(ArrayList<Item> currList){
+        currList.clear();
+        return currList;
     }
 
     public void saveListButtonPressed(ActionEvent actionEvent) {
@@ -82,16 +105,14 @@ public class MainScreenController implements Initializable {
 
     public void openFileMenuButtonPressed(ActionEvent actionEvent) {
     }
-
-    public void addItemMenuButtonPressed(ActionEvent actionEvent) {
+    
+    public void helpMenuButtonPressed(ActionEvent actionEvent) {
     }
 
-    public void editItemMenuButtonPressed(ActionEvent actionEvent) {
+    public void setMainList(ArrayList<Item> currList){
+        mainList = currList;
     }
 
     public void deleteItemMenuButtonPressed(ActionEvent actionEvent) {
-    }
-
-    public void helpMenuButtonPressed(ActionEvent actionEvent) {
     }
 }

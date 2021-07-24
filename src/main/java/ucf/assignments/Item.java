@@ -5,6 +5,12 @@ public class Item {
     private String serialNumber;
     private String name;
 
+    public Item(String value, String serialNumber, String name){
+        this.value = value;
+        this.serialNumber = serialNumber;
+        this.name = name;
+    }
+
     public void setValue(double value){
         String num = Double.toString(value);
         this.value = "$" + num;
