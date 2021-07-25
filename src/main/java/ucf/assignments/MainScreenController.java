@@ -56,6 +56,7 @@ public class MainScreenController implements Initializable {
 
     public ArrayList<Item> clearList(ArrayList<Item> currList){
         currList.clear();
+        systemMessageArea.setText("List cleared.");
         return currList;
     }
 
@@ -101,6 +102,7 @@ public class MainScreenController implements Initializable {
             //remove it from the ArrayList
             currList.remove(index);
         }
+        systemMessageArea.setText("Items successfully deleted.");
         //return the updated ArrayList
         return currList;
     }
@@ -446,6 +448,5 @@ public class MainScreenController implements Initializable {
         itemTable.setEditable(true);
         itemTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
-
 
 }
