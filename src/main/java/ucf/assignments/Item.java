@@ -15,7 +15,7 @@ public class Item {
             //Format the String to ensure that it has decimal values
             Double valueDouble = Double.valueOf(value);
             //Assign the String with a "$" in front
-            this.value = String.format("$ %.2f", valueDouble);
+            this.value = String.format("$%.2f", valueDouble);
             //return true to indicate that the value was added successfully
             return true;
         }else{

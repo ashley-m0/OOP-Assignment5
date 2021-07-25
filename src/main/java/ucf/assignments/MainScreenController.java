@@ -19,8 +19,15 @@ import javafx.stage.FileChooser;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class MainScreenController implements Initializable {
 
@@ -84,7 +91,7 @@ public class MainScreenController implements Initializable {
 
     public String formatListForTXT(ArrayList<Item> currList){
         //initialize return string
-        String message = "";
+        String message = String.format("%s\t %s\t %s\n", "Value", "Serial Number", "Name");;
         //iterate through the list of items
         for (Item item: currList){
             //add to message the item's value, serial number, and name
@@ -127,7 +134,8 @@ public class MainScreenController implements Initializable {
 
     public String formatListForHTML(ArrayList<Item> currList){
         //initialize return string with the beginning headers of html doc
-        String message = "<!DOCTYPE html>\n" + "<html lang=\"en\">\n" + "<head>\n" + "<meta charset=\"UTF-8\">\n" + "<title>Inventory</title>\n" +"</head>\n<body>\n<table border = '1' style = \"width: 100%\">\n";
+        String message = "<!DOCTYPE html>\n" + "<html lang=\"en\">\n" + "<head>\n" + "<meta charset=\"UTF-8\">\n" + "<title>Inventory</title>\n" +"</head>\n<body>\n<table>\n";
+        message += String.format("<td>%s</td>\n<td>%s</td>\n<td>%s</td>\n", "Value", "Serial Number", "Name");
         //iterate through items in currList
         for(Item item:currList){
             //add table row opener
@@ -216,19 +224,143 @@ public class MainScreenController implements Initializable {
      */
 
     public void openTXTButtonPressed(ActionEvent actionEvent) {
+        //get file picked by the user
+        File selectedFile = openFileChooser();
+        //if the file is not null
+        if(selectedFile != null){
+            //call the getInfoFromTXT method to get information from file
+            mainList = getInfoFromTXT(selectedFile, mainList);
+            //update the table with the newly entered data
+            updateTable(mainList);
+            //indicate to user that the items have been successfully added to the list
+            systemMessageArea.setText("All items added to list");
+        }else{
+            //if file is null indicate to user that the file is invalid
+            systemMessageArea.setText("Invalid file.");
+        }
+    }
+
+    public ArrayList<Item> getInfoFromTXT(File inText, ArrayList<Item> currList){
+        try {
+            //initialize scanner for file
+            Scanner input = new Scanner(inText);
+            //scan in the first line of headers
+            String garbage = input.nextLine();
+            //iterate while there is a next line
+            while (input.hasNextLine()){
+                //initialize the array of information
+                String[] information  = new String[3];
+                //scan in information into array
+                information[0] = input.next();
+                information[1] = input.next();
+                information[2] = input.nextLine();
+                //add the item to the list
+                currList = addItem(currList, information);
+            }
+        } catch (FileNotFoundException e) {
+            //otherwise indicate to user that an error had occurred.
+            systemMessageArea.setText("An error occurred.");
+            e.printStackTrace();
+        }
+        return currList;
     }
 
     public void openHTMLButtonPressed(ActionEvent actionEvent) {
+        //get file picked by the user
+        File selectedFile = openFileChooser();
+        //if the file is not null
+        if(selectedFile != null){
+            //call the getInfoFromHTML method to get information from file
+            mainList = getInfoFromHTML(selectedFile, mainList);
+            //update the table with the newly entered data
+            updateTable(mainList);
+            //indicate to user that the items were successfully added to the list
+            systemMessageArea.setText("All items added to list");
+        }else{
+            //if file is null indicate to user that the file is invalid
+            systemMessageArea.setText("Invalid file.");
+        }
+    }
+
+    public ArrayList<Item> getInfoFromHTML(File inText, ArrayList<Item> currList){
+        //initialize the Document for JSoup
+        Document htmlFile = null;
+        try {
+            htmlFile = Jsoup.parse(inText, "UTF-8", "http://example.com/" );
+        } catch (IOException e) {
+            //otherwise indicate to user that an error had occurred.
+            systemMessageArea.setText("An error occurred.");
+            e.printStackTrace();
+        }
+        //In the case that there are multiple tables
+        Elements tables = htmlFile.select("table");
+        //iterate through tables
+        for(Element table: tables) {
+            //get the rows of the table
+            Elements rows = table.select("tr");
+            //iterate through the rows
+            for (int i = 1; i < rows.size(); i++) {
+                //get the data
+                Elements tableData = rows.get(i).select("td");
+                //initialize String Array that will hold the item's information
+                String[] information = new String[3];
+                //iterate through data
+                for (int j = 0; j < tableData.size(); j++) {
+                    //add the data to the String Array
+                    information[j] = tableData.get(j).text();
+                }
+                //add item to the list
+                currList = addItem(currList, information);
+            }
+        }
+        //return the newly updated list
+        return currList;
     }
 
     public void openJSONButtonPressed(ActionEvent actionEvent) {
+        //get file picked by the user
+        File selectedFile = openFileChooser();
+        //if the file is not null
+        if(selectedFile != null){
+            //call the getInfoFromJSON method to get the information from the file
+            mainList = getInfoFromJSON(selectedFile, mainList);
+            //update the table with the newly added items
+            updateTable(mainList);
+            //indicate to user that the items were added successfully
+            systemMessageArea.setText("All items added to list");
+        }else{
+            //if file is null indicate to user that the file is invalid
+            systemMessageArea.setText("Invalid file.");
+        }
     }
 
-    /**
-     * Open Help Menu
-     * @param actionEvent
-     */
-    public void helpMenuButtonPressed(ActionEvent actionEvent) {
+
+    public ArrayList<Item> getInfoFromJSON(File inFile, ArrayList<Item> currList){
+        //initialize JSON parser
+        JSONParser parser = new JSONParser();
+        try {
+            //get the array of objects from the file
+            JSONArray list = (JSONArray)parser.parse(new FileReader(inFile));
+            //iterate through objects in array
+            for(Object obj: list){
+                //initialize a JSON object
+                JSONObject item = (JSONObject) obj;
+                //initialize the string array that will hold the item's information
+                String[] information = new String[3];
+                //get the information from the file and add it to the string array
+                information[0] = (String) item.get("Value");
+                information[1] = (String) item.get("Serial Number");
+                information[2] = (String) item.get("Name");
+                //add item to the list
+                currList = addItem(currList, information);
+            }
+        } catch (IOException | ParseException e) {
+            //otherwise indicate to user that an error had occurred.
+            systemMessageArea.setText("An error occurred.");
+            e.printStackTrace();
+        }
+        //return newly updated list
+        return currList;
     }
 
     /**
@@ -356,16 +488,16 @@ public class MainScreenController implements Initializable {
      * @param actionEvent
      */
     public void addItemButtonPressed(ActionEvent actionEvent) {
+        //get information from fields
+        String[] information = getInfoFromFields();
         //call add item method
-        mainList = addItem(mainList);
+        mainList = addItem(mainList, information);
 
         //update table
         updateTable(mainList);
     }
 
-    public ArrayList<Item> addItem(ArrayList<Item> currList){
-        //get information from fields
-        String[] information = getInfoFromFields();
+    public ArrayList<Item> addItem(ArrayList<Item> currList, String[] information){
         //initialize a boolean variable to keep track of the correct values
         boolean correct = true;
         //initialize the new item
