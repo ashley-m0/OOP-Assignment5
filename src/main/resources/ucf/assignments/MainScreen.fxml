@@ -40,8 +40,20 @@
           <Menu mnemonicParsing="false" text="File">
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#newListMenuButtonPressed" text="New List" />
-              <MenuItem mnemonicParsing="false" onAction="#saveListButtonPressed" text="Save As..." />
-                  <MenuItem mnemonicParsing="false" onAction="#openFileMenuButtonPressed" text="Open..." />
+                  <Menu mnemonicParsing="false" text="Save As...">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#saveTXTButtonPressed" text="TSV File (.txt)" />
+                        <MenuItem mnemonicParsing="false" onAction="#saveHTMLButtonPressed" text="HTML File (.html)" />
+                        <MenuItem mnemonicParsing="false" onAction="#saveJSONButtonPressed" text="JSON File (.json)" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Open...">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#openTXTButtonPressed" text="TSV File (.txt)" />
+                        <MenuItem mnemonicParsing="false" onAction="#openHTMLButtonPressed" text="HTML File (.html)" />
+                        <MenuItem mnemonicParsing="false" onAction="#openJSONButtonPressed" text="JSON (.json)" />
+                    </items>
+                  </Menu>
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">

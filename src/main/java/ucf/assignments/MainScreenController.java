@@ -15,9 +15,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.FileChooser;
+import java.io.*;
 import java.net.URL;
 import java.util.*;
-
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 public class MainScreenController implements Initializable {
 
@@ -64,14 +67,161 @@ public class MainScreenController implements Initializable {
      * Save List to External File
      * @param actionEvent
      */
-    public void saveListButtonPressed(ActionEvent actionEvent) {
+    public void saveTXTButtonPressed(ActionEvent actionEvent) {
+        //get file picked by the user
+        File selectedFile = openFileChooser();
+        //if the file is not null
+        if(selectedFile != null){
+            //call the formatListForTXT method to format list
+            String message = formatListForTXT(mainList);
+            //call the printInformationToTXT method to print the message to the file
+            printInformationToTXT(selectedFile, message);
+        }else{
+            //if file is null indicate to user that the file is invalid
+            systemMessageArea.setText("Invalid file.");
+        }
+    }
+
+    public String formatListForTXT(ArrayList<Item> currList){
+        //initialize return string
+        String message = "";
+        //iterate through the list of items
+        for (Item item: currList){
+            //add to message the item's value, serial number, and name
+            message += String.format("%s\t %s\t %s\n", item.getValue(), item.getSerialNumber(), item.getName());
+        }
+        //return message
+        return message;
+    }
+
+    public void printInformationToTXT(File outText, String message){
+        try {
+            //initialize FileWriter
+            FileWriter myWriter = new FileWriter(outText);
+            //write the message to the file
+            myWriter.write(message);
+            //close FileWriter
+            myWriter.close();
+            //indicate to user that the list was successfully written to the file
+            systemMessageArea.setText("List successfully written to file.");
+        } catch (IOException e) {
+            //otherwise indicate to user that an error had occurred.
+            systemMessageArea.setText("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+    public void saveHTMLButtonPressed(ActionEvent actionEvent) {
+        //get file picked by the user
+        File selectedFile = openFileChooser();
+        //if the file is not null
+        if(selectedFile != null){
+            //call the formatListForHTML method to format list to be ready to be written
+            String message = formatListForHTML(mainList);
+            //call the printInformationToHTML method to print message to file
+            printInformationToHTML(selectedFile, message);
+        }else{
+            //if the file is null indicate to user that the file was invalid
+            systemMessageArea.setText("Invalid file.");
+        }
+    }
+
+    public String formatListForHTML(ArrayList<Item> currList){
+        //initialize return string with the beginning headers of html doc
+        String message = "<!DOCTYPE html>\n" + "<html lang=\"en\">\n" + "<head>\n" + "<meta charset=\"UTF-8\">\n" + "<title>Inventory</title>\n" +"</head>\n<body>\n<table border = '1' style = \"width: 100%\">\n";
+        //iterate through items in currList
+        for(Item item:currList){
+            //add table row opener
+            message += "<tr>\n";
+            //add table data (item's value, serial number, and name)
+            message += String.format("<td>%s</td>\n<td>%s</td>\n<td>%s</td>\n", item.getValue(), item.getSerialNumber(), item.getName());
+            //add table row closer
+            message += "</tr>\n";
+        }
+        //close table, body, and html doc
+        message += "</table>\n</body>\n</html>\n";
+        //return String
+        return message;
+    }
+
+    public void printInformationToHTML(File outText, String message){
+        try {
+            //initialize BufferedWriter to write to outText
+            BufferedWriter bw = new BufferedWriter(new FileWriter(outText));
+            //write message to file
+            bw.write(message);
+            //close BufferedWriter
+            bw.close();
+            //indicate to user that the list was successfully written to the file
+            systemMessageArea.setText("List successfully written to file.");
+        } catch (IOException e) {
+            //otherwise indicate to user that an error had occurred.
+            systemMessageArea.setText("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+    public void saveJSONButtonPressed(ActionEvent actionEvent) {
+        //get file picked by user
+        File selectedFile = openFileChooser();
+        // if the file is not null
+        if(selectedFile != null){
+            //format list to be written to JSON file by calling formatListForJSON
+            JSONArray message = formatListForJSON(mainList);
+            //call printInformationToJSON method to write message to file
+            printInformationToJSON(selectedFile, message);
+        }else{
+            //if the file is null indicate to user that the file was invalid
+            systemMessageArea.setText("Invalid file.");
+        }
+    }
+
+    public JSONArray formatListForJSON(ArrayList<Item> currList){
+        //initialize the main JSONArray
+        JSONArray main = new JSONArray();
+        //iterate through all items in currList
+        for(Item item: currList){
+            //initialize JSONObject
+            JSONObject object = new JSONObject();
+            //put the item's value, serial number, and name into the object
+            object.put("Value", item.getValue());
+            object.put("Serial Number", item.getSerialNumber());
+            object.put("Name", item.getName());
+            //add the object to the array
+            main.add(object);
+        }
+        //return the JSONArray
+        return main;
+    }
+
+    public void printInformationToJSON(File outText, JSONArray list){
+        try {
+            //initialize the FileWriter to the outText
+            FileWriter fw = new FileWriter(outText);
+            //write list to file
+            fw.write(list.toJSONString());
+            //close FileWriter
+            fw.flush();
+            //indicate to user that the list was successfully written to the file
+            systemMessageArea.setText("List successfully written to file.");
+        } catch (IOException e) {
+            //otherwise indicate to user that an error had occurred.
+            systemMessageArea.setText("An error occurred.");
+            e.printStackTrace();
+        }
     }
 
     /**
      * Insert List from an External File
      * @param actionEvent
      */
-    public void openFileMenuButtonPressed(ActionEvent actionEvent) {
+
+    public void openTXTButtonPressed(ActionEvent actionEvent) {
+    }
+
+    public void openHTMLButtonPressed(ActionEvent actionEvent) {
+    }
+
+    public void openJSONButtonPressed(ActionEvent actionEvent) {
     }
 
     /**
@@ -322,6 +472,12 @@ public class MainScreenController implements Initializable {
     /**
      * Universally Used Methods
      */
+    public File openFileChooser(){
+        FileChooser fc = new FileChooser();
+        File selectedFile = fc.showOpenDialog(null);
+        return selectedFile;
+    }
+
     public int searchBySN(ArrayList<Item> currlist, String query){
         String queryCAP = query.toUpperCase(Locale.ROOT);
         //iterate through ArrayList of Items
@@ -448,5 +604,6 @@ public class MainScreenController implements Initializable {
         itemTable.setEditable(true);
         itemTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
+
 
 }
