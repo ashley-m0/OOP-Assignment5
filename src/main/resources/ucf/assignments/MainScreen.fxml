@@ -61,9 +61,9 @@
               <MenuItem mnemonicParsing="false" onAction="#deleteItemMenuButtonPressed" text="Delete Item" />
                   <Menu mnemonicParsing="false" text="Sort...">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="by Value" />
-                        <MenuItem mnemonicParsing="false" text="by Serial Number" />
-                        <MenuItem mnemonicParsing="false" text="by Name" />
+                      <MenuItem mnemonicParsing="false" onAction="#sortValueButtonPressed" text="by Value" />
+                        <MenuItem mnemonicParsing="false" onAction="#sortSerialNumberButtonPressed" text="by Serial Number" />
+                        <MenuItem mnemonicParsing="false" onAction="#sortNameButtonPressed" text="by Name" />
                     </items>
                   </Menu>
             </items>

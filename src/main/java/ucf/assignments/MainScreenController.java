@@ -19,7 +19,7 @@ import javafx.stage.FileChooser;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
-
+import java.lang.Integer;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -390,6 +390,122 @@ public class MainScreenController implements Initializable {
     }
 
     /**
+     * Sort Items
+     * @param actionEvent
+     */
+    public void sortValueButtonPressed(ActionEvent actionEvent) {
+        //call the sortValues method
+        mainList = sortValues(mainList);
+        //update the table with the sorted list
+        updateTable(mainList);
+        //indicate to user that the items were sorted successfully
+        systemMessageArea.setText("Items sorted by value successfully.");
+    }
+
+    public ArrayList<Item> sortValues(ArrayList<Item> currList){
+        //initialize temporary ArrayList<Item> variable that will hold the new sorted list
+        ArrayList<Item> newList = new ArrayList<Item>();
+        //initialize a variable that will keep track of the current item with the next largest value
+        int alphaIndex;
+        //initialize a variable that keeps track of how long the original list was
+        int length = currList.size();
+        //for loop from 0 to the length of the original list
+        for (int i = 0; i < length; i++) {
+            //reset the index of the item with the highest value back to 0 each time loop iterates
+            alphaIndex = 0;
+            //nested for loop from 1 to the current size of the original ArrayList
+            for (int j = 1; j < currList.size(); j++) {
+                //remove dollar signs
+                char[] currDS = currList.get(j).getValue().toCharArray();
+                char[] alphaDS = currList.get(alphaIndex).getValue().toCharArray();
+                Double curr = Double.valueOf(removeDollarSign(currDS));
+                Double alpha = Double.valueOf(removeDollarSign(alphaDS));
+                //if the value is larger than the current item at the alphaIndex
+                if (Double.compare(curr, alpha) > 0) {
+                    //set the alphaIndex to the current index
+                    alphaIndex = j;
+                }
+            }
+            //once the item with the highest value is found add the element to the new list and delete the item from the old list
+            newList.add(currList.get(alphaIndex));
+            currList.remove(alphaIndex);
+        }
+        //return the sorted list
+        return newList;
+    }
+    public void sortSerialNumberButtonPressed(ActionEvent actionEvent) {
+        //call the sortSN method
+        mainList = sortSN(mainList);
+        //update the table with the sorted list
+        updateTable(mainList);
+        //indicate to user that the items were sorted successfully
+        systemMessageArea.setText("Items sorted by serial number successfully.");
+    }
+
+    public ArrayList<Item> sortSN(ArrayList<Item> currList){
+        //initialize temporary ArrayList<Item> variable that will hold the new sorted list
+        ArrayList<Item> newList = new ArrayList<Item>();
+        //initialize a variable that will keep track of the current item with the next highest serial number
+        int alphaIndex;
+        //initialize a variable that keeps track of how long the original list was
+        int length = currList.size();
+        //for loop from 0 to the length of the original list
+        for (int i = 0; i < length; i++) {
+            //reset the index of the item with the highest serial number back to 0 each time loop iterates
+            alphaIndex = 0;
+            //nested for loop from 1 to the current size of the original ArrayList
+            for (int j = 1; j < currList.size(); j++) {
+                //if the serial number is higher than the current item at the alphaIndex
+                if (currList.get(j).getSerialNumber().compareTo(currList.get(alphaIndex).getSerialNumber()) < 0) {
+                    //set the alphaIndex to the current index
+                    alphaIndex = j;
+                }
+            }
+            //once the item with the highest serial number is found add the element to the new list and delete the item from the old list
+            newList.add(currList.get(alphaIndex));
+            currList.remove(alphaIndex);
+        }
+        //return the sorted list
+        return newList;
+    }
+
+    public void sortNameButtonPressed(ActionEvent actionEvent) {
+        //call the sortName method
+        mainList = sortName(mainList);
+        //update the table with the sorted list
+        updateTable(mainList);
+        //indicate to user that the items were sorted successfully
+        systemMessageArea.setText("Items sorted by name successfully.");
+    }
+
+    public ArrayList<Item> sortName(ArrayList<Item> currList){
+        //initialize temporary ArrayList<Item> variable that will hold the new sorted list
+        ArrayList<Item> newList = new ArrayList<Item>();
+        //initialize a variable that will keep track of the current item with the next highest name
+        int alphaIndex;
+        //initialize a variable that keeps track of how long the original list was
+        int length = currList.size();
+        //for loop from 0 to the length of the original list
+        for (int i = 0; i < length; i++) {
+            //reset the index of the item with the highest name back to 0 each time loop iterates
+            alphaIndex = 0;
+            //nested for loop from 1 to the current size of the original ArrayList
+            for (int j = 1; j < currList.size(); j++) {
+                //if the name is higher than the current item at the alphaIndex
+                if (currList.get(j).getName().compareTo(currList.get(alphaIndex).getName()) < 0) {
+                    //set the alphaIndex to the current index
+                    alphaIndex = j;
+                }
+            }
+            //once the item with the highest name is found add the element to the new list and delete the item from the old list
+            newList.add(currList.get(alphaIndex));
+            currList.remove(alphaIndex);
+        }
+        //return the sorted list
+        return newList;
+    }
+
+    /**
      * Edit Items in List
      * @param editCell
      */
@@ -736,6 +852,7 @@ public class MainScreenController implements Initializable {
         itemTable.setEditable(true);
         itemTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
+
 
 
 }
