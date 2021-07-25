@@ -10,22 +10,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.stage.Stage;
-
-import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class MainScreenController implements Initializable {
@@ -68,15 +59,31 @@ public class MainScreenController implements Initializable {
         return currList;
     }
 
+    /**
+     * Save List to External File
+     * @param actionEvent
+     */
     public void saveListButtonPressed(ActionEvent actionEvent) {
     }
 
+    /**
+     * Insert List from an External File
+     * @param actionEvent
+     */
     public void openFileMenuButtonPressed(ActionEvent actionEvent) {
     }
-    
+
+    /**
+     * Open Help Menu
+     * @param actionEvent
+     */
     public void helpMenuButtonPressed(ActionEvent actionEvent) {
     }
 
+    /**
+     * Delete Item from List
+     * @param actionEvent
+     */
     public void deleteItemMenuButtonPressed(ActionEvent actionEvent) {
         //get selected tasks
         ObservableList<Item> selectedItems = itemTable.getSelectionModel().getSelectedItems();
@@ -98,15 +105,104 @@ public class MainScreenController implements Initializable {
         return currList;
     }
 
-    public void valueEditCommitted(TableColumn.CellEditEvent<Item, String> itemStringCellEditEvent) {
+    /**
+     * Edit Items in List
+     * @param editCell
+     */
+    public void valueEditCommitted(TableColumn.CellEditEvent editCell) {
+        //get item that was selected
+        Item itemSelected = itemTable.getSelectionModel().getSelectedItem();
+        //get the new value entered by user
+        String newValue = editCell.getNewValue().toString();
+        //call updateValue method
+        mainList = updateValue(mainList, itemSelected.getSerialNumber(), newValue);
+        //updateTable
+        updateTable(mainList);
     }
 
-    public void serialNumberEditCommitted(TableColumn.CellEditEvent<Item, String> itemStringCellEditEvent) {
+    public ArrayList<Item> updateValue(ArrayList<Item> currList, String serialNumber, String newValue){
+        //find the index of the item that will be updated
+        int index = searchBySN(currList, serialNumber);
+        //In the case that the user enters in a value with a $
+        char[] charArray = newValue.toCharArray();
+        String valueWODollarSign = newValue;
+        //if the value has a $
+        if (charArray[0] == '$'){
+            //call the removeDollarSign method
+            valueWODollarSign = removeDollarSign(charArray);
+        }
+        //if the value is added correctly
+        if (mainList.get(index).setValue(valueWODollarSign)){
+            //indicate to user that the value was updated successfully
+            systemMessageArea.setText("Value updated.");
+        }else{
+            //indicate to user that the value entered was not valid resulting in an unsuccessful add
+            systemMessageArea.setText("Invalid value.");
+        }
+        //return the currList with the new updated value
+        return currList;
     }
 
-    public void nameEditCommitted(TableColumn.CellEditEvent<Item, String> itemStringCellEditEvent) {
+     public void serialNumberEditCommitted(TableColumn.CellEditEvent editCell) {
+        //get item selected in table
+        Item itemSelected = itemTable.getSelectionModel().getSelectedItem();
+        //get the new serial number entered by user
+        String newSerialNumber = editCell.getNewValue().toString();
+        //call the updateSerialNumber method
+        mainList = updateSerialNumber(mainList, itemSelected.getSerialNumber(), newSerialNumber);
+        //update table
+        updateTable(mainList);
     }
 
+    public ArrayList<Item> updateSerialNumber(ArrayList<Item> currList,String originalSerialNumber, String newSerialNumber){
+        //find the index of the item that will be updated
+        int index = searchBySN(currList, originalSerialNumber);
+        //search if there are any items with the same serial number
+        boolean duplicates = findSNDuplicates(currList, newSerialNumber);
+        //if there are no duplicates and the serial number is valid
+        if (!duplicates && currList.get(index).setSerialNumber(newSerialNumber)){
+            //indicate to user that the serial number was updated successfully
+            systemMessageArea.setText("Serial Number updated.");
+        }else{
+            //indicate to user that the serial number entered was invalid resulting in an unsuccessful add
+            systemMessageArea.setText("Invalid serial number.");
+        }
+        //return the currList with the updated serial number
+        return currList;
+    }
+
+    public void nameEditCommitted(TableColumn.CellEditEvent editCell) {
+        //get the item that was selected in the table
+        Item itemSelected = itemTable.getSelectionModel().getSelectedItem();
+        //get the new name entered by the user
+        String newName = editCell.getNewValue().toString();
+        //call the updateName method
+        mainList = updateName(mainList, itemSelected.getName(), newName);
+        //update table
+        updateTable(mainList);
+    }
+
+    public ArrayList<Item> updateName(ArrayList<Item> currList, String originalName, String newName){
+        //find the index of the item that will be updated
+        int index = searchByName(currList, originalName);
+        //search if there are any items with the same name
+        boolean duplicates = findNameDuplicates(currList, newName);
+        //if there are no duplicates and the name is valid
+        if (!duplicates && currList.get(index).setName(newName)){
+            //indicate to the user that the name was successfully updated
+            systemMessageArea.setText("Name updated.");
+        }else{
+            //indicate to the user that the name entered was invalid resulting in an unsuccessful add
+            systemMessageArea.setText("Invalid name.");
+        }
+        //return currList with updated name
+        return currList;
+    }
+
+    /**
+     * Add Item to List
+     * @param actionEvent
+     */
     public void addItemButtonPressed(ActionEvent actionEvent) {
         //call add item method
         mainList = addItem(mainList);
@@ -124,6 +220,12 @@ public class MainScreenController implements Initializable {
         Item newItem = new Item();
         //initialize the message that will be displayed to the user
         String message = "";
+
+        //In the case that the user accidentally enters in a $ sign with the value
+        char[] charArray = information[0].toCharArray();
+        if (charArray[0] == '$'){
+            information[0] = removeDollarSign(charArray);
+        }
 
         //determine whether the information entered is correct
         if(!newItem.setValue(information[0])){
@@ -174,7 +276,10 @@ public class MainScreenController implements Initializable {
         return information;
     }
 
-
+    /**
+     * Search for an Item in List
+     * @param actionEvent
+     */
 
     public void searchItemButtonPressed(ActionEvent actionEvent) {
         //call the searchItem method to find whether the item was found or not
@@ -212,11 +317,17 @@ public class MainScreenController implements Initializable {
         return message;
     }
 
+    /**
+     * Universally Used Methods
+     */
     public int searchBySN(ArrayList<Item> currlist, String query){
+        String queryCAP = query.toUpperCase(Locale.ROOT);
         //iterate through ArrayList of Items
         for(int i = 0; i < currlist.size(); i++){
+            //get the element from the currList
+            String element = currlist.get(i).getSerialNumber().toUpperCase(Locale.ROOT);
             //if an item's serial number matches the query
-            if (currlist.get(i).getSerialNumber().equals(query)){
+            if (element.equals(queryCAP)){
                 //return the index
                 return i;
             }
@@ -226,10 +337,13 @@ public class MainScreenController implements Initializable {
     }
 
     public int searchByName(ArrayList<Item> currlist, String query){
+        String queryCAP = query.toUpperCase(Locale.ROOT);
         //iterate through ArrayList of Items
         for(int i = 0; i < currlist.size(); i++){
+            //get the element in the currList
+            String element = currlist.get(i).getName().toUpperCase(Locale.ROOT);
             //if an item's name matches the query
-            if (currlist.get(i).getName().equals(query)){
+            if (element.equals(queryCAP)){
                 //return the index
                 return i;
             }
@@ -262,6 +376,19 @@ public class MainScreenController implements Initializable {
             //return true (there are duplicates)
             return true;
         }
+    }
+
+    public String removeDollarSign(char[] charArray){
+        char[] newArray = new char[charArray.length - 1];
+        int counter = 0;
+        for (char element: charArray){
+            if (element != '$'){
+                newArray[counter] = element;
+                counter++;
+            }
+        }
+        String newValue = String.valueOf(newArray);
+        return newValue;
     }
 
     public void setUpChoiceBox(){
