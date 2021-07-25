@@ -5,15 +5,31 @@ Created by: Ashley Mojica
 How to use the app:
 
 - How do I add an item to the inventory?
-    1. Click on the "Edit" menu button at the top right of the window
-    2. Click on "Add Item."
-    3. A new window will appear where you will enter the new item's information.
-    4. Once you are finished hit the "Add Item" button.
-    5. Ensure that the item was added correctly.
-    6. Click the "OK" button to return to the main screen.
-    
+    1. Locate the "Add Item to Inventory:" section on the main screen.
+    2. Enter the item's information into the designated fields.
+        - Ensure the the value has no more that two decimal places and that the value entered is in USD.
+        - The serial number must be unique and 10 characters long without any special characters (only numbers and letters).
+        - The name must be unique and at least 2 characters long but less than 256 characters
+    3. Click the "Add Item" button and it will show in the bottom Text Area if the item was added successfully.
+
+
 - How do I edit an item in the inventory? 
+    1. Click on the element(value, serial number, or name) you wish to edit within the table.
+    2. Enter in the new element into the box. (The same requirements as mentioned in "How do I add an item to the inventory?" must be met)
+    3. Click "Enter" on your keyboard and it will show in the bottom Text Area if the element was updated successfully.
+
+
 - How do I delete an item in the inventory?
+    1. Click on the item you wish to delete in the the table. (You can select multiple by holding down the "CTRL" key on your keyboard and clicking on more items)
+    2. Go to the "Edit" menu at the top of the screen.
+    3. Click on "Delete" and the selected items will be deleted. 
+
+- How do I clear the table?
+    1. Go to the "File" menu at the top of the screen.
+    2. Click on "New List" and the list will be cleared. 
+
 - How do I upload a list of items from an external file into the inventory?
+
+
 - How do I save the list of items to an external file?
     
