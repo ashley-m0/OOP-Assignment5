@@ -128,12 +128,40 @@ class MainScreenControllerTest {
 
     @Test
     public void updateValueCorrectly(){
-        setUp();
-        ArrayList<Item> actualList  = controller.updateValue(itemList,"S40AZBDE47", "5.99" );
-        assertEquals("$5.99", actualList.get(0).getValue());
-        assertEquals("S40AZBDE47", actualList.get(0).getSerialNumber());
-        assertEquals("Samsung TV", actualList.get(0).getName());
-       }
+       ArrayList<Item> actualList  = new ArrayList<>();
+       boolean placeholder;
+       Item testItem1 = new Item();
+       placeholder= testItem1.setValue("399.00");
+       placeholder= testItem1.setSerialNumber("AXB124AXY3");
+       placeholder= testItem1.setName("Xbox One");
+       actualList.add(testItem1);
+       actualList = controller.updateValue(actualList, "AXB124AXY3", "5");
+       assertEquals("$5.00", actualList.get(0).getValue());
+       assertEquals("AXB124AXY3", actualList.get(0).getSerialNumber());
+       assertEquals("Xbox One", actualList.get(0).getName());
+    }
 
+    @Test
+    public void updateSerialNumberCorrectly(){
+        ArrayList<Item> actualList  = new ArrayList<>();
+        boolean placeholder;
+        Item testItem1 = new Item();
+        placeholder= testItem1.setValue("399.00");
+        placeholder= testItem1.setSerialNumber("AXB124AXY3");
+        placeholder= testItem1.setName("Xbox One");
+        actualList.add(testItem1);
+        actualList = controller.updateSerialNumber(actualList, "AXB124AXY3", "456ASD7892");
+        assertEquals("$399.00", actualList.get(0).getValue());
+        assertEquals("456ASD7892", actualList.get(0).getSerialNumber());
+        assertEquals("Xbox One", actualList.get(0).getName());
+    }
+
+    @Test
+    public void searchForItemCorrectly(){
+        setUp();
+        String expected = String.format("Item found:\nValue: %10s | Serial Number: %12s | Name: %s", "$599.99", "S40AZBDE47","Samsung TV");
+        String actual = controller.searchItem(itemList, "Serial Number", "S40AZBDE47");
+        assertEquals(expected, actual);
+    }
 
 }
