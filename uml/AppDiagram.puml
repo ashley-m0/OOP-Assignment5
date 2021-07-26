@@ -10,55 +10,82 @@ class Item{
     - serialNumber: String
     - name: String
 
-    + setValue(value: double)
+    + setValue(value: String): boolean
+    + authenticateValue(value: String): boolean
     + getValue(): String
-    + setSerialNumber(serialNumber: String)
+    + setSerialNumber(serialNumber: String): boolean
+    + authenticateSerialNumber(serialNumber: String): boolean
+    + correctLength(serialNumber: String): boolean
+    + specialCharactersPresent(serialNumber:String): boolean
     + getSerialNumber(): String
-    + setName(name: String)
+    + setName(name: String): boolean
+    + authenticateName(name: String): boolean
     + getName(): String
 }
 
 class MainScreenController{
     - mainList: ArrayList<Item>
-    - scenes: HashMap
     - itemTable: TableView<Item>
     - valueColumn: TableColumn<Item, String>
     - serialNumberColumn: TableColumn<Item, String>
     - nameColumn: TableColumn<Item, String>
+    - valueField: TextField
+    - serialNumberField: TextField
+    - nameField: TextField
+    - queryField: TextField
+    - queryType: Choicebox
+    - systemMessageArea: TextArea
 
-    + initialize()
-    + updateTable(currList: ArrayList<Item>)
-    + getTableInfo(currList: ArrayList<Item>)
     + newListMenuButtonPressed(actionEvent: ActionEvent)
-    + clearList(currList: ArrayList<Item>)
-    + saveListMenuButtonPressed(actionEvent: ActionEvent)
-    + loadSaveFileScreen()
-    + openFileMenuButtonPressed(actionEvent: ActionEvent)
-    + loadOpenFileScreen()
-    + addItemMenuButtonPressed(actionEvent: ActionEvent)
-    + loadAddItemScreen()
-    + editItemMenuButtonPressed(actionEvent: ActionEvent)
-    + loadEditItemScreen()
+    + clearList(currList: ArrayList<Item>): ArrayList<Item>
+    + saveTXTButtonPressed(actionEvent: ActionEvent)
+    + formatListForTXT(currList: ArrayList<Item>): String
+    + printInformationToTXT(outText: File, message: String)
+    + saveHTMLButtonPressed(actionEvent: ActionEvent)
+    + formatListForHTML(currList: ArrayList<Item>): String
+    + printInformationToHTML(outText: File, message: String)
+    + saveJSONButtonPressed(actionEvent: ActionEvent)
+    + formatListForJSON(currList: ArrayList<Item>): String
+    + printInformationToJSON(outText: File, message: String)
+    + openTXTButtonPressed(actionEvent: ActionEvent)
+    + getInfoFromTXT(inText:File, currList: ArrayList<Item>): ArrayList<Item>
+    + openHTMLButtonPressed(actionEvent: ActionEvent)
+    + getInfoFromHTML(inText:File, currList: ArrayList<Item>): ArrayList<Item>
+    + openJSONButtonPressed(actionEvent: ActionEvent)
+    + getInfoFromJSON(inText:File, currList: ArrayList<Item>): ArrayList<Item>
     + deleteItemMenuButtonPressed(actionEvent: ActionEvent)
-    + loadDeleteItemScreen()
-    + helpMenuButtonPressed(actionEvent: ActionEvent)
-    + loadHelpScreen()
+    + removeItems(currList: ArrayList<Item>, selectedItems: ObservableList<Item>): ArrayList<Item>
+    + sortValueButtonPressed(actionEvent: ActionEvent)
+    + sortValues(currList: ArrayList<Item>): ArrayList<Item>
+    + sortSNButtonPressed(actionEvent: ActionEvent)
+    + sortSN(currList: ArrayList<Item>): ArrayList<Item>
+    + sortNameButtonPressed(actionEvent: ActionEvent)
+    + sortName(currList: ArrayList<Item>): ArrayList<Item>
+    + valueEditCommitted(editCell: TableColumn.CellEditEvent)
+    + updateValue(currList: ArrayList<Item>, serialNumber: String, newValue: String): ArrayList<Item>
+    + serialNumberEditCommitted(editCell: TableColumn.CellEditEvent)
+    + updateSerialNumber(currList: ArrayList<Item>, serialNumber: String, newValue: String): ArrayList<Item>
+    + nameEditCommitted(editCell: TableColumn.CellEditEvent)
+    + updateName(currList: ArrayList<Item>, serialNumber: String, newValue: String): ArrayList<Item>
+    + addItemButtonPressed(actionEvent: ActionEvent)
+    + addItem(currList: ArrayList<Item>, information: String[]): ArrayList<Item>
+    + getInfoFromFields(): String[]
+    + searchItemButtonPressed(actionEvent: ActionEvent)
+    + searchItem(currList: ArrayList<Item>, type: String, query: String)
+    + openFileChooser(): File
+    + searchBySN(currList: ArrayList<Item>, query: String): int
+    + searchByName(currList: ArrayList<Item>, query: String): int
+    + findSNDuplicates(currList: ArrayList<Item>, query: String): boolean
+    + findNameDuplicates(currList: ArrayList<Item>, query: String): boolean
+    + removeDollarSign(charArray: char[]): String
+    + setUpChoiceBox()
+    + resetFields()
+    + updateTable(currList: ArrayList<Item>)
+    + getTableInfo(currList: ArrayList<Item>): ArrayList<Item>
+    + initialize()
 }
 
-class SaveFileController{}
-class OpenFileController{}
-class AddItemController{}
-class EditItemController{}
-class DeleteItemController{}
-class HelpScreenController{}
 
 javafx.Application <|-- App
-
 App - MainScreenController
-MainScreenController -- SaveFileController
-MainScreenController -- OpenFileController
-MainScreenController -- AddItemController
-MainScreenController -- EditItemController
-MainScreenController -- DeleteItemController
-MainScreenController -- HelpScreenController
 @enduml

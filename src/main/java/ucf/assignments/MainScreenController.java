@@ -31,7 +31,6 @@ import org.jsoup.select.Elements;
 
 public class MainScreenController implements Initializable {
 
-    private Map<String, Scene> scenes = new HashMap<>();
     private ArrayList<Item> mainList = new ArrayList<Item>();
 
     //Initialize the table and its elements
