@@ -11,15 +11,15 @@ class Item{
     - name: String
 
     + setValue(value: String): boolean
-    + authenticateValue(value: String): boolean
+    - authenticateValue(value: String): boolean
     + getValue(): String
     + setSerialNumber(serialNumber: String): boolean
-    + authenticateSerialNumber(serialNumber: String): boolean
-    + correctLength(serialNumber: String): boolean
-    + specialCharactersPresent(serialNumber:String): boolean
+    - authenticateSerialNumber(serialNumber: String): boolean
+    - correctLength(serialNumber: String): boolean
+    - specialCharactersPresent(serialNumber:String): boolean
     + getSerialNumber(): String
-    + setName(name: String): boolean
-    + authenticateName(name: String): boolean
+    - setName(name: String): boolean
+    - authenticateName(name: String): boolean
     + getName(): String
 }
 
@@ -40,13 +40,13 @@ class MainScreenController{
     + clearList(currList: ArrayList<Item>): ArrayList<Item>
     + saveTXTButtonPressed(actionEvent: ActionEvent)
     + formatListForTXT(currList: ArrayList<Item>): String
-    + printInformationToTXT(outText: File, message: String)
+    - printInformationToTXT(outText: File, message: String)
     + saveHTMLButtonPressed(actionEvent: ActionEvent)
     + formatListForHTML(currList: ArrayList<Item>): String
-    + printInformationToHTML(outText: File, message: String)
+    - printInformationToHTML(outText: File, message: String)
     + saveJSONButtonPressed(actionEvent: ActionEvent)
     + formatListForJSON(currList: ArrayList<Item>): String
-    + printInformationToJSON(outText: File, message: String)
+    - printInformationToJSON(outText: File, message: String)
     + openTXTButtonPressed(actionEvent: ActionEvent)
     + getInfoFromTXT(inText:File, currList: ArrayList<Item>): ArrayList<Item>
     + openHTMLButtonPressed(actionEvent: ActionEvent)

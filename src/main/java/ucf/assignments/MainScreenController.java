@@ -61,11 +61,11 @@ public class MainScreenController implements Initializable {
         ArrayList<Item> currList = clearList(mainList);
         //Update Table
         updateTable(currList);
+        systemMessageArea.setText("List cleared.");
     }
 
     public ArrayList<Item> clearList(ArrayList<Item> currList){
         currList.clear();
-        systemMessageArea.setText("List cleared.");
         return currList;
     }
 
@@ -90,7 +90,7 @@ public class MainScreenController implements Initializable {
 
     public String formatListForTXT(ArrayList<Item> currList){
         //initialize return string
-        String message = String.format("%s\t %s\t %s\n", "Value", "Serial Number", "Name");;
+        String message = String.format("%s\t %s\t %s\n", "Value", "Serial Number", "Name");
         //iterate through the list of items
         for (Item item: currList){
             //add to message the item's value, serial number, and name
@@ -100,7 +100,7 @@ public class MainScreenController implements Initializable {
         return message;
     }
 
-    public void printInformationToTXT(File outText, String message){
+    private void printInformationToTXT(File outText, String message){
         try {
             //initialize FileWriter
             FileWriter myWriter = new FileWriter(outText);
@@ -150,7 +150,7 @@ public class MainScreenController implements Initializable {
         return message;
     }
 
-    public void printInformationToHTML(File outText, String message){
+    private void printInformationToHTML(File outText, String message){
         try {
             //initialize BufferedWriter to write to outText
             BufferedWriter bw = new BufferedWriter(new FileWriter(outText));
@@ -200,7 +200,7 @@ public class MainScreenController implements Initializable {
         return main;
     }
 
-    public void printInformationToJSON(File outText, JSONArray list){
+    private void printInformationToJSON(File outText, JSONArray list){
         try {
             //initialize the FileWriter to the outText
             FileWriter fw = new FileWriter(outText);
@@ -257,8 +257,6 @@ public class MainScreenController implements Initializable {
                 currList = addItem(currList, information);
             }
         } catch (FileNotFoundException e) {
-            //otherwise indicate to user that an error had occurred.
-            systemMessageArea.setText("An error occurred.");
             e.printStackTrace();
         }
         return currList;
@@ -287,8 +285,6 @@ public class MainScreenController implements Initializable {
         try {
             htmlFile = Jsoup.parse(inText, "UTF-8", "http://example.com/" );
         } catch (IOException e) {
-            //otherwise indicate to user that an error had occurred.
-            systemMessageArea.setText("An error occurred.");
             e.printStackTrace();
         }
         //In the case that there are multiple tables
@@ -354,8 +350,6 @@ public class MainScreenController implements Initializable {
                 currList = addItem(currList, information);
             }
         } catch (IOException | ParseException e) {
-            //otherwise indicate to user that an error had occurred.
-            systemMessageArea.setText("An error occurred.");
             e.printStackTrace();
         }
         //return newly updated list
@@ -373,6 +367,7 @@ public class MainScreenController implements Initializable {
         mainList = removeItems(mainList, selectedItems);
         //update the table
         updateTable(mainList);
+        systemMessageArea.setText("Items successfully deleted.");
     }
 
     public ArrayList<Item> removeItems(ArrayList<Item> currList, ObservableList<Item> selectedItems){
@@ -383,7 +378,6 @@ public class MainScreenController implements Initializable {
             //remove it from the ArrayList
             currList.remove(index);
         }
-        systemMessageArea.setText("Items successfully deleted.");
         //return the updated ArrayList
         return currList;
     }

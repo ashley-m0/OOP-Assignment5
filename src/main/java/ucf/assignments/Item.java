@@ -24,7 +24,7 @@ public class Item {
         }
     }
 
-    public boolean authenticateValue(String value){
+    private boolean authenticateValue(String value){
         Double num = Double.valueOf(value);
         if (BigDecimal.valueOf(num).scale() > 2){
             return false;
@@ -51,7 +51,7 @@ public class Item {
 
     }
 
-    public boolean authenticateSerialNumber(String serialNumber){
+    private boolean authenticateSerialNumber(String serialNumber){
         if(correctLength(serialNumber) && !specialCharactersPresent(serialNumber)){
             return true;
         }else{
@@ -59,7 +59,7 @@ public class Item {
         }
     }
 
-    public boolean correctLength(String serialNumber){
+    private boolean correctLength(String serialNumber){
         //transform string into a character array
         char[] numbers = serialNumber.toCharArray();
         //if the array's length is longer than 10 return false and return true otherwise
@@ -70,7 +70,7 @@ public class Item {
         }
     }
 
-    public boolean specialCharactersPresent(String serialNumber){
+    private boolean specialCharactersPresent(String serialNumber){
         //initialize pattern to see if any special characters were entered
         Pattern p = Pattern.compile("[^A-Za-z0-9]");
         //initialize matcher to the string
@@ -97,7 +97,7 @@ public class Item {
 
     }
 
-    public boolean authenticateName(String name){
+    private boolean authenticateName(String name){
         char[] letters = name.toCharArray();
         if(letters.length >= 2 && letters.length <= 256){
             return true;
